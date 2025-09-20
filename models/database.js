@@ -1,98 +1,95 @@
-const sqlite3 = require('sqlite3').verbose();
+const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
-const path = require('path');
 
-const db = new sqlite3.Database('./studyhub.db');
+const pool = process.env.DATABASE_URL ? 
+  new Pool({ 
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  }) : null;
 
-const initDatabase = () => {
-  db.serialize(() => {
-    // Users table
-    db.run(`
+const initDatabase = async () => {
+  if (!pool) {
+    console.log('No DATABASE_URL provided');
+    return;
+  }
+
+  try {
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        full_name TEXT,
-        avatar_url TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        last_active DATETIME DEFAULT CURRENT_TIMESTAMP
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        full_name VARCHAR(255),
+        avatar_url VARCHAR(255),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
-    // Study rooms table
-    db.run(`
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS study_rooms (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
         description TEXT,
-        creator_id INTEGER,
-        is_private BOOLEAN DEFAULT 0,
+        creator_id INTEGER REFERENCES users(id),
+        is_private BOOLEAN DEFAULT FALSE,
         max_participants INTEGER DEFAULT 50,
-        password TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (creator_id) REFERENCES users (id)
+        password VARCHAR(255),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
-    // Room participants table
-    db.run(`
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS room_participants (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        room_id INTEGER,
-        user_id INTEGER,
-        joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (room_id) REFERENCES study_rooms (id),
-        FOREIGN KEY (user_id) REFERENCES users (id)
+        id SERIAL PRIMARY KEY,
+        room_id INTEGER REFERENCES study_rooms(id),
+        user_id INTEGER REFERENCES users(id),
+        joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
-    // Friends table
-    db.run(`
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS friendships (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        requester_id INTEGER,
-        addressee_id INTEGER,
-        status TEXT DEFAULT 'pending',
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (requester_id) REFERENCES users (id),
-        FOREIGN KEY (addressee_id) REFERENCES users (id)
+        id SERIAL PRIMARY KEY,
+        requester_id INTEGER REFERENCES users(id),
+        addressee_id INTEGER REFERENCES users(id),
+        status VARCHAR(50) DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
-    // Chat messages table
-    db.run(`
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS chat_messages (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        room_id INTEGER,
-        sender_id INTEGER,
+        id SERIAL PRIMARY KEY,
+        room_id INTEGER REFERENCES study_rooms(id),
+        sender_id INTEGER REFERENCES users(id),
         message TEXT NOT NULL,
-        message_type TEXT DEFAULT 'text',
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (room_id) REFERENCES study_rooms (id),
-        FOREIGN KEY (sender_id) REFERENCES users (id)
+        message_type VARCHAR(50) DEFAULT 'text',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
-    // Private messages table
-    db.run(`
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS private_messages (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        sender_id INTEGER,
-        receiver_id INTEGER,
+        id SERIAL PRIMARY KEY,
+        sender_id INTEGER REFERENCES users(id),
+        receiver_id INTEGER REFERENCES users(id),
         message TEXT NOT NULL,
-        read_status BOOLEAN DEFAULT 0,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (sender_id) REFERENCES users (id),
-        FOREIGN KEY (receiver_id) REFERENCES users (id)
+        read_status BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-  });
 
-  console.log('Database initialized successfully');
+    console.log('PostgreSQL database initialized successfully');
+  } catch (error) {
+    console.error('Database initialization failed:', error);
+  }
 };
 
 module.exports = {
-  db,
+  pool,
   initDatabase
 };
+
+
