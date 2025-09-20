@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub - Study Room</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="room-container">
+        <header class="room-header">
+            <div class="room-info">
+                <h2 id="roomName">Study Room</h2>
+                <span id="participantCount">0 participants</span>
+            </div>
+            <div class="room-controls">
+                <button id="toggleVideo" class="control-btn active">📹</button>
+                <button id="toggleAudio" class="control-btn active">🎤</button>
+                <button id="shareScreen" class="control-btn">📺</button>
+                <button id="toggleChat" class="control-btn">💬</button>
+                <button id="leaveRoom" class="control-btn leave">❌</button>
+            </div>
+        </header>
+
+        <div class="room-main">
+            <div class="video-container" id="videoContainer">
+                <div class="video-wrapper main-video">
+                    <video id="localVideo" autoplay muted playsinline></video>
+                    <div class="video-label">You</div>
+                    <div class="video-controls">
+                        <span class="video-status" id="localVideoStatus">📹 🎤</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-container" id="chatContainer">
+                <div class="chat-header">
+                    <h3>Chat</h3>
+                    <button id="closeChatBtn">×</button>
+                </div>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type a message..." maxlength="500">
+                    <button id="sendMessage">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="participants-list" id="participantsList">
+            <h3>Participants</h3>
+            <div id="participants"></div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/room.js"></script>
+</body>
+</html>

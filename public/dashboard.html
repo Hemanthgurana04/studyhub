@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="nav-bar">
+            <div class="nav-brand">📚 StudyHub</div>
+            <div class="nav-user">
+                <span id="userName"></span>
+                <button id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h3>Quick Actions</h3>
+                <button id="createRoomBtn" class="btn-primary">Create Room</button>
+                <button id="joinRoomBtn" class="btn-secondary">Join Room</button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Friends</h3>
+                <div id="friendsList" class="friends-list"></div>
+                <button id="addFriendBtn" class="btn-outline">Add Friend</button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Friend Requests</h3>
+                <div id="friendRequests" class="friend-requests"></div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <h2>Public Study Rooms</h2>
+                <div id="publicRooms" class="rooms-grid"></div>
+            </div>
+
+            <div class="section">
+                <h2>My Rooms</h2>
+                <div id="myRooms" class="rooms-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Room Modal -->
+    <div id="createRoomModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create Study Room</h2>
+            <form id="createRoomForm">
+                <div class="input-group">
+                    <input type="text" id="roomName" placeholder="Room Name" required>
+                </div>
+                <div class="input-group">
+                    <textarea id="roomDescription" placeholder="Room Description"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>
+                        <input type="checkbox" id="isPrivate"> Private Room
+                    </label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="roomPassword" placeholder="Password (for private rooms)">
+                </div>
+                <div class="input-group">
+                    <input type="number" id="maxParticipants" placeholder="Max Participants" value="50" min="2" max="100">
+                </div>
+                <button type="submit" class="btn-primary">Create Room</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Friend Modal -->
+    <div id="addFriendModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Friend</h2>
+            <form id="addFriendForm">
+                <div class="input-group">
+                    <input type="text" id="friendUsername" placeholder="Friend's Username" required>
+                </div>
+                <button type="submit" class="btn-primary">Send Friend Request</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

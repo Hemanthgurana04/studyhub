@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub - Video Study Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 StudyHub</h1>
+            <p>Connect. Study. Succeed Together.</p>
+        </div>
+
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <button class="tab-btn active" data-tab="login">Login</button>
+                <button class="tab-btn" data-tab="register">Register</button>
+            </div>
+
+            <div class="tab-content active" id="login">
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input type="email" id="loginEmail" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+            </div>
+
+            <div class="tab-content" id="register">
+                <form id="registerForm">
+                    <div class="input-group">
+                        <input type="text" id="registerUsername" placeholder="Username" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="registerEmail" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="registerFullName" placeholder="Full Name">
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="registerPassword" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3>🎥 Video Rooms</h3>
+                <p>HD video chat with screen sharing</p>
+            </div>
+            <div class="feature">
+                <h3>👥 Study Groups</h3>
+                <p>Create public or private study rooms</p>
+            </div>
+            <div class="feature">
+                <h3>💬 Real-time Chat</h3>
+                <p>Group and private messaging</p>
+            </div>
+            <div class="feature">
+                <h3>🤝 Friend System</h3>
+                <p>Connect with study partners</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+    <script src="js/main.js"></script>
+</body>
+</html>
