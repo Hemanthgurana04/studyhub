@@ -1,6 +1,4 @@
-
-   const { Pool } = require('pg');
-const bcrypt = require('bcryptjs');
+const { Pool } = require('pg');
 
 const pool = process.env.DATABASE_URL ? 
   new Pool({ 
@@ -15,6 +13,7 @@ const initDatabase = async () => {
   }
 
   try {
+    // Users table with email verification
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -23,15 +22,13 @@ const initDatabase = async () => {
         password VARCHAR(255) NOT NULL,
         full_name VARCHAR(255),
         avatar_url VARCHAR(255),
-        is_verified BOOLEAN DEFAULT FALSE,
-        verification_token VARCHAR(255),
-        verification_token_expires TIMESTAMP,
+        email_verified BOOLEAN DEFAULT FALSE,
+        verification_token VARCHAR(500),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
-    // Rest of your tables...
     await pool.query(`
       CREATE TABLE IF NOT EXISTS study_rooms (
         id SERIAL PRIMARY KEY,
@@ -86,7 +83,7 @@ const initDatabase = async () => {
       )
     `);
 
-    console.log('PostgreSQL database with email verification initialized successfully');
+    console.log('PostgreSQL database initialized successfully with email verification');
   } catch (error) {
     console.error('Database initialization failed:', error);
   }
