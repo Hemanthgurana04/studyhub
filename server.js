@@ -48,6 +48,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/friends', friendRoutes);
 
+// Add this line in your server.js after other routes
+const migrateRoutes = require('./routes/migrate');
+app.use('/api/migrate', migrateRoutes);
+
+
 // Initialize database
 initDatabase();
 
