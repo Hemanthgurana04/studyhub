@@ -14,7 +14,28 @@
             <p>Connect. Study. Succeed Together.</p>
         </div>
 
-        <div class="auth-container">
+        <!-- Verification Success Message -->
+        <div id="verificationSuccess" class="verification-success" style="display: none;">
+            <div class="success-content">
+                <h2>🎉 Email Verified Successfully!</h2>
+                <p>Your account is now active. You can log in below.</p>
+            </div>
+        </div>
+
+        <!-- Verification Required Message -->
+        <div id="verificationRequired" class="verification-required" style="display: none;">
+            <div class="verification-content">
+                <h2>📧 Check Your Email!</h2>
+                <p>We've sent a verification link to:</p>
+                <p class="email-address" id="userEmail"></p>
+                <p>Click the link in the email to activate your account.</p>
+                <p><em>Didn't receive the email? Check your spam folder or click below to resend.</em></p>
+                <button id="resendBtn" class="btn-secondary">Resend Verification Email</button>
+                <button id="backToLogin" class="btn-outline">Back to Login</button>
+            </div>
+        </div>
+
+        <div class="auth-container" id="authContainer">
             <div class="auth-tabs">
                 <button class="tab-btn active" data-tab="login">Login</button>
                 <button class="tab-btn" data-tab="register">Register</button>
@@ -28,7 +49,10 @@
                     <div class="input-group">
                         <input type="password" id="loginPassword" placeholder="Password" required>
                     </div>
-                    <button type="submit" class="btn-primary">Login</button>
+                    <button type="submit" class="btn-primary">
+                        <span class="btn-text">Login</span>
+                        <span class="btn-loading" style="display: none;">Signing in...</span>
+                    </button>
                 </form>
             </div>
 
@@ -41,32 +65,35 @@
                         <input type="email" id="registerEmail" placeholder="Email" required>
                     </div>
                     <div class="input-group">
-                        <input type="text" id="registerFullName" placeholder="Full Name">
+                        <input type="text" id="registerFullName" placeholder="Full Name (Optional)">
                     </div>
                     <div class="input-group">
-                        <input type="password" id="registerPassword" placeholder="Password" required>
+                        <input type="password" id="registerPassword" placeholder="Password (min 6 characters)" required>
                     </div>
-                    <button type="submit" class="btn-primary">Register</button>
+                    <button type="submit" class="btn-primary">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-loading" style="display: none;">Creating account...</span>
+                    </button>
                 </form>
             </div>
         </div>
 
         <div class="features">
             <div class="feature">
-                <h3>🎥 Video Rooms</h3>
-                <p>HD video chat with screen sharing</p>
+                <h3>🎥 HD Video Rooms</h3>
+                <p>Crystal clear video chat with screen sharing capabilities</p>
             </div>
             <div class="feature">
                 <h3>👥 Study Groups</h3>
-                <p>Create public or private study rooms</p>
+                <p>Create public or private study rooms for focused collaboration</p>
             </div>
             <div class="feature">
                 <h3>💬 Real-time Chat</h3>
-                <p>Group and private messaging</p>
+                <p>Instant messaging for group discussions and private conversations</p>
             </div>
             <div class="feature">
                 <h3>🤝 Friend System</h3>
-                <p>Connect with study partners</p>
+                <p>Connect with study partners and build your learning network</p>
             </div>
         </div>
     </div>
