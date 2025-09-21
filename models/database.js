@@ -1,4 +1,5 @@
-const { Pool } = require('pg');
+
+   const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 
 const pool = process.env.DATABASE_URL ? 
@@ -22,11 +23,15 @@ const initDatabase = async () => {
         password VARCHAR(255) NOT NULL,
         full_name VARCHAR(255),
         avatar_url VARCHAR(255),
+        is_verified BOOLEAN DEFAULT FALSE,
+        verification_token VARCHAR(255),
+        verification_token_expires TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
+    // Rest of your tables...
     await pool.query(`
       CREATE TABLE IF NOT EXISTS study_rooms (
         id SERIAL PRIMARY KEY,
@@ -81,7 +86,7 @@ const initDatabase = async () => {
       )
     `);
 
-    console.log('PostgreSQL database initialized successfully');
+    console.log('PostgreSQL database with email verification initialized successfully');
   } catch (error) {
     console.error('Database initialization failed:', error);
   }
@@ -91,5 +96,3 @@ module.exports = {
   pool,
   initDatabase
 };
-
-
